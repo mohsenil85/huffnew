@@ -24,7 +24,7 @@ public class HuffmanApp {
 					Huffman.enqueue();
 					break;
 				case ("s"): 
-					
+					Huffman.createTree();
 					break;
 				case ("c"):
 					System.out.println("CODE");
