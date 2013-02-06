@@ -28,6 +28,7 @@ public class HuffmanApp {
 					break;
 				case ("c"):
 					System.out.println("CODE");
+					Huffman.encode();
 					break;
 	
 				case ("d"):
@@ -49,7 +50,7 @@ public class HuffmanApp {
 		System.out.println("end");
 	}
 	
-	private static String processInput(){
+	private static String processInput(){//fitler out unwanted input
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		boolean done = false;
 		int input = 0;
@@ -57,23 +58,32 @@ public class HuffmanApp {
 		while (!done){
 			try{
 				input = br.read();
+			
 			}catch (IOException e){
 				System.out.println(e);
+			}finally{
+				
 			}
 			if (input == 36){
 				done = true;
 				break;
 			}
 			if (input == 10)
-				input = (char) '\\';
+				input = (char) '\\';//filter out actual linefeeds and change them to slashes
 			if (input == 32)
-				input = (char) '[';
+				input = (char) '[';//ditto for spaces
 			inputString += (char) input;
 			
 		}
 		inputString += (char) '*';  //eof char
-		inputString = inputString.toUpperCase();
+		inputString = inputString.toUpperCase();//uppercase anything that can be uppercased
+//		try{
+//			br.close();
+//		}catch (IOException e){
+//			System.out.println(e);
+//		}
 		return inputString;	
+		
 		
 	}
 

@@ -11,15 +11,15 @@ class Tree
 	public Tree() // constructor
 	{ root = null; } // no nodes in tree yet
 	//-------------------------------------------------------------
-	public void merge(Tree item1, Tree item2){
-		Node newNode = new Node();
-		newNode.freq = item1.root.freq + item2.root.freq;
-		newNode.ch = '+';
-		newNode.leftChild = item1.root;
-		newNode.rightChild = item2.root;
-		Tree aTree = new Tree();
-		aTree.insert(newNode);
-	}
+//	public void merge(Tree item1, Tree item2){
+//		Node newNode = new Node();
+//		newNode.freq = item1.root.freq + item2.root.freq;
+//		newNode.ch = '+';
+//		newNode.leftChild = item1.root;
+//		newNode.rightChild = item2.root;
+//		Tree aTree = new Tree();
+//		aTree.insert(newNode);
+//	}
 	// -------------------------------------------------------------
 	public void insert(Node n)
 	{

@@ -4,7 +4,8 @@ public class Huffman {
 	static int[] freqTable = new int[ALPHABET_SIZE];
 	static String inputString;
 	static Tree huffTree;
-	String codedMsg;
+	static String codedMsg;
+	static String[] codeTable = new String[ALPHABET_SIZE];
 
 	public static void makeFreqTable(String is) {
 		inputString = is;
@@ -64,11 +65,11 @@ public class Huffman {
 
 	public static void createTree() {
 		try {
-			while (theQ.size() > 1) {
+			do {
 				Tree left = theQ.remove();
 				Tree right = theQ.remove();
 				theQ.insert(merge(left, right));
-			}
+			} while (theQ.size() > 1);
 			huffTree = theQ.remove();
 			huffTree.displayTree();
 		} catch (ArrayIndexOutOfBoundsException e) {
@@ -77,7 +78,7 @@ public class Huffman {
 
 	}
 
-	public static Tree merge(Tree item1, Tree item2) {
+	private static Tree merge(Tree item1, Tree item2) {
 		Node newNode = new Node();
 		newNode.freq = item1.root.freq + item2.root.freq;
 		newNode.ch = '+';
@@ -87,5 +88,33 @@ public class Huffman {
 		aTree.insert(newNode);
 		return aTree;
 	}
+	
+	public static void encode(){
+		codedMsg = "";
+		Node current = huffTree.root;
+		makeCodeTable(current, codedMsg);
+		
+		
+		
+		
+		//start at root
+		//travers until find a leafe node
+		//each fork, append either one or zero to 
+	}
+	
+	private static void makeCodeTable(Node localRoot, String binString){
+		if (!(localRoot.ch == '+')){
+			//codeTable[(((int)localRoot.ch)e - 65)] = binString;
+			System.out.print(localRoot.ch + " = ");
+			System.out.println(binString);
+			
+		} else {
+			makeCodeTable(localRoot.leftChild, binString + "1"); 
+			makeCodeTable(localRoot.rightChild, binString + "0"); 
+			
+		}
+		
+	}
+	
 
 }
