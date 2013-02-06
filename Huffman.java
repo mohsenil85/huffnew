@@ -6,6 +6,7 @@ public class Huffman {
 	static Tree huffTree;
 	static String codedMsg;
 	static String[] codeTable = new String[ALPHABET_SIZE];
+	static String secretMessage = "";
 
 	public static void makeFreqTable(String is) {
 		inputString = is;
@@ -94,9 +95,13 @@ public class Huffman {
 		Node current = huffTree.root;
 		makeCodeTable(current, codedMsg);
 		
+		for (int i = 0; i < codeTable.length-1; i++){
+			if (codeTable[i] != null){
+				System.out.println("Code " + codeTable[i] + "char " + ((char) (i + 65)) );
+			}
+		}
 		
-		
-		
+		System.out.println(secretMessage);
 		//start at root
 		//travers until find a leafe node
 		//each fork, append either one or zero to 
@@ -104,17 +109,30 @@ public class Huffman {
 	
 	private static void makeCodeTable(Node localRoot, String binString){
 		if (!(localRoot.ch == '+')){
-			//codeTable[(((int)localRoot.ch)e - 65)] = binString;
-			System.out.print(localRoot.ch + " = ");
-			System.out.println(binString);
+			if (localRoot.ch == '*'){
+				codeTable[29] = binString;
+			} else if (localRoot.ch == '['){
+				codeTable[28] = binString;
+			} else if (localRoot.ch == '\\'){
+				codeTable[27] = binString;
+			} else {
+			codeTable[(((int)localRoot.ch) - 65)] = binString;
+			}
+//			System.out.print(localRoot.ch + " = ");
+//			System.out.println(binString);
 			
 		} else {
 			makeCodeTable(localRoot.leftChild, binString + "1"); 
 			makeCodeTable(localRoot.rightChild, binString + "0"); 
 			
 		}
+		secretMessage += binString;
+	}//end makecodetab
+	
+	private static void decode(){
+		
+		
 		
 	}
-	
 
 }
