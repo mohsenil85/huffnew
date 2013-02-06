@@ -7,6 +7,8 @@ public class Huffman {
 	static String codedMsg;
 	static String[] codeTable = new String[ALPHABET_SIZE];
 	static String secretMessage = "";
+	static String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\*";
+	static String decodedMsg = "";
 
 	public static void makeFreqTable(String is) {
 		inputString = is;
@@ -30,7 +32,7 @@ public class Huffman {
 		System.out.println();
 		for (int i = 0; i < freqTable.length; i++) {
 			if (freqTable[i] != 0)
-				System.out.print(((char) (i + 65)) + " ");
+				System.out.print(ALPHABET.charAt(i) + " ");
 		}
 		System.out.print('*');
 		System.out.println();
@@ -42,7 +44,7 @@ public class Huffman {
 
 				if (freqTable[i] != 0) {
 					Node aNode = new Node();
-					aNode.ch = (char) (i + 65);
+					aNode.ch = ALPHABET.charAt(i);
 					aNode.freq = freqTable[i];
 					Tree aTree = new Tree();
 					aTree.insert(aNode);
@@ -97,24 +99,20 @@ public class Huffman {
 		
 		for (int i = 0; i < codeTable.length-1; i++){
 			if (codeTable[i] != null){
-				System.out.println("Code " + codeTable[i] + "char " + ((char) (i + 65)) );
+				System.out.println("Code " + codeTable[i] + "char " + ALPHABET.charAt(i) );
 			}
 		}
-		
 		System.out.println(secretMessage);
-		//start at root
-		//travers until find a leafe node
-		//each fork, append either one or zero to 
 	}
 	
 	private static void makeCodeTable(Node localRoot, String binString){
 		if (!(localRoot.ch == '+')){
 			if (localRoot.ch == '*'){
-				codeTable[29] = binString;
-			} else if (localRoot.ch == '['){
 				codeTable[28] = binString;
-			} else if (localRoot.ch == '\\'){
+			} else if (localRoot.ch == '['){
 				codeTable[27] = binString;
+			} else if (localRoot.ch == '\\'){
+				codeTable[26] = binString;
 			} else {
 			codeTable[(((int)localRoot.ch) - 65)] = binString;
 			}
@@ -129,9 +127,24 @@ public class Huffman {
 		secretMessage += binString;
 	}//end makecodetab
 	
-	private static void decode(){
+	public static void decode(){
 		
-		
+		decodeRecurs(0, huffTree.root);	
+		System.out.println(decodedMsg);
+	}
+	
+	private static void decodeRecurs(int index, Node current){
+		if (current.ch != '+'){
+		decodedMsg += current.ch;	
+		} else if (secretMessage.charAt(index) == 1){
+			decodeRecurs(index + 1, current.leftChild);
+			decodedMsg += current.ch;
+		}else if (secretMessage.charAt(index) == 0){
+			decodeRecurs(index + 1, current.rightChild);
+			decodedMsg += current.ch;
+		}else{
+			System.out.println("this was hit");
+		}
 		
 	}
 

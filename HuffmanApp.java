@@ -33,6 +33,7 @@ public class HuffmanApp {
 	
 				case ("d"):
 					System.out.println("DECODE");
+					Huffman.decode();
 					break;
 	
 				case ("q"):
