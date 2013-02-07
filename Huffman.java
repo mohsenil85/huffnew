@@ -9,13 +9,19 @@ public class Huffman {
 	static String secretMessage = "";
 	static String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\*";
 	static String decodedMsg = "";
+	static String bs = "";
 
 	public static void makeFreqTable(String is) {
 		inputString = is;
 
-		for (int i = 0; i < is.length() - 1; i++) {
+		for (int i = 0; i < is.length(); i++) {
 			try {
-				freqTable[(int) inputString.charAt(i) - 65]++;
+				System.out.println("(int) inputString.charAt(i) - 65 = " + ((int) inputString.charAt(i) - 65) );
+				if ((int) inputString.charAt(i) - 65 != -23){
+					freqTable[(int) inputString.charAt(i) - 65]++;
+				}else{
+					freqTable[28]++;
+				}
 			} catch (ArrayIndexOutOfBoundsException e) {
 				System.out.println("Illegal character detected." +
 						"  Try removing punctuation");
@@ -28,23 +34,25 @@ public class Huffman {
 				System.out.print(freqTable[i] + " ");
 			}
 		}
-		System.out.print('1');
+		//System.out.print('1');
 		System.out.println();
 		for (int i = 0; i < freqTable.length; i++) {
 			if (freqTable[i] != 0)
 				System.out.print(ALPHABET.charAt(i) + " ");
 		}
-		System.out.print('*');
+		//System.out.print('*');//the eof node actually gets appended elsewhere, so this is just here to make the table look how its going to be
 		System.out.println();
 	}
 
 	public static void enqueue() {
-		try {
-			for (int i = 0; i < inputString.length() + 1; i++) {
+		
+//		try {
+			for (int i = 0; i < freqTable.length; i++) {
+				
 
 				if (freqTable[i] != 0) {
 					Node aNode = new Node();
-					aNode.ch = ALPHABET.charAt(i);
+					aNode.ch = ALPHABET.charAt(i);//its easy to just cast the char, but this way we can easily refer to eol and sp chars
 					aNode.freq = freqTable[i];
 					Tree aTree = new Tree();
 					aTree.insert(aNode);
@@ -55,24 +63,24 @@ public class Huffman {
 			
 
 			} // end for
-			Node eofNode = new Node();
-			eofNode.ch = '*';
-			eofNode.freq = 1;
-			Tree eofTree = new Tree();
-			eofTree.insert(eofNode);
-			theQ.insert(eofTree);
-		} catch (ArrayIndexOutOfBoundsException e) {
-			System.out.println("this only happens sometimes");
-		}// end try catch()
+//			Node eofNode = new Node();//this is where the eof node gets appended.  This is so the algorithm knows to ignore any data that comes after this char
+//			eofNode.ch = '*';
+//			eofNode.freq = 1;
+//			Tree eofTree = new Tree();
+//			eofTree.insert(eofNode);
+//			theQ.insert(eofTree);
+//		} catch (ArrayIndexOutOfBoundsException e) {
+//			System.out.println("this only happens sometimes");
+//		}// end try catch()
 	}// end enqueue()
 
 	public static void createTree() {
 		try {
-			do {
+			while (theQ.size() > 1) {
 				Tree left = theQ.remove();
 				Tree right = theQ.remove();
 				theQ.insert(merge(left, right));
-			} while (theQ.size() > 1);
+			} 
 			huffTree = theQ.remove();
 			huffTree.displayTree();
 		} catch (ArrayIndexOutOfBoundsException e) {
@@ -97,7 +105,16 @@ public class Huffman {
 		Node current = huffTree.root;
 		makeCodeTable(current, codedMsg);
 		
-		for (int i = 0; i < codeTable.length-1; i++){
+		for (int i = 0; i < inputString.length() - 1; i++){
+			//System.out.print(inputString.charAt(i));
+			if(inputString.charAt(i) == '['){
+				System.out.println(codeTable[27] + " xx " + inputString.charAt(i));
+			}
+			System.out.println(codeTable[inputString.charAt(i) - 65] + " xx " + inputString.charAt(i));
+			
+		}
+		
+		for (int i = 0; i < codeTable.length-1; i++){//for debuggering
 			if (codeTable[i] != null){
 				System.out.println("Code " + codeTable[i] + "char " + ALPHABET.charAt(i) );
 			}
@@ -115,6 +132,7 @@ public class Huffman {
 				codeTable[26] = binString;
 			} else {
 			codeTable[(((int)localRoot.ch) - 65)] = binString;
+			bs+=binString;
 			}
 //			System.out.print(localRoot.ch + " = ");
 //			System.out.println(binString);
@@ -124,28 +142,30 @@ public class Huffman {
 			makeCodeTable(localRoot.rightChild, binString + "0"); 
 			
 		}
-		secretMessage += binString;
+//		secretMessage += binString;
 	}//end makecodetab
 	
-	public static void decode(){
-		
-		decodeRecurs(0, huffTree.root);	
-		System.out.println(decodedMsg);
-	}
-	
-	private static void decodeRecurs(int index, Node current){
-		if (current.ch != '+'){
-		decodedMsg += current.ch;	
-		} else if (secretMessage.charAt(index) == 1){
-			decodeRecurs(index + 1, current.leftChild);
-			decodedMsg += current.ch;
-		}else if (secretMessage.charAt(index) == 0){
-			decodeRecurs(index + 1, current.rightChild);
-			decodedMsg += current.ch;
-		}else{
-			System.out.println("this was hit");
-		}
-		
-	}
+//	public static void decode(){
+//		System.out.println(bs);
+//		
+//		decodeRecurs(0, huffTree.root);	
+//		System.out.println(decodedMsg);
+//	}
+//	
+//	private static void decodeRecurs(int index, Node current){
+//		if (current.ch != '+'){
+//			decodedMsg += current.ch;	
+//		} 
+//		if (bs.charAt(index) == 1){
+//			decodeRecurs(index + 1, current.leftChild);
+//			decodedMsg += current.ch;
+//		}else if (bs.charAt(index) == 0){
+//			decodeRecurs(index + 1, current.rightChild);
+//			decodedMsg += current.ch;
+//		}else{
+//			System.out.println("this was hit");
+//		}
+//		
+//	}
 
 }
