@@ -16,7 +16,7 @@ public class Huffman {
 
 		for (int i = 0; i < is.length(); i++) {
 			try {
-				System.out.println("(int) inputString.charAt(i) - 65 = " + ((int) inputString.charAt(i) - 65) );
+			//	System.out.println("(int) inputString.charAt(i) - 65 = " + ((int) inputString.charAt(i) - 65) );
 				if ((int) inputString.charAt(i) - 65 != -23){
 					freqTable[(int) inputString.charAt(i) - 65]++;
 				}else{
@@ -106,19 +106,18 @@ public class Huffman {
 		makeCodeTable(current, codedMsg);
 		
 		for (int i = 0; i < inputString.length() - 1; i++){
-			//System.out.print(inputString.charAt(i));
-			if(inputString.charAt(i) == '['){
-				System.out.println(codeTable[27] + " xx " + inputString.charAt(i));
-			}
-			System.out.println(codeTable[inputString.charAt(i) - 65] + " xx " + inputString.charAt(i));
+			secretMessage += codeTable[inputString.charAt(i) - 65];
+		//	System.out.println(codeTable[inputString.charAt(i) - 65] + " xx " + inputString.charAt(i));
 			
 		}
 		
-		for (int i = 0; i < codeTable.length-1; i++){//for debuggering
-			if (codeTable[i] != null){
-				System.out.println("Code " + codeTable[i] + "char " + ALPHABET.charAt(i) );
-			}
-		}
+//		for (int i = 0; i < codeTable.length-1; i++){//for debuggering
+//			if (codeTable[i] != null){
+//				System.out.println("Code " + codeTable[i] + "char " + ALPHABET.charAt(i) );
+//			}
+//		}
+		
+		System.out.println("Encoded Message:  ");
 		System.out.println(secretMessage);
 	}
 	
@@ -142,30 +141,34 @@ public class Huffman {
 			makeCodeTable(localRoot.rightChild, binString + "0"); 
 			
 		}
-//		secretMessage += binString;
+
 	}//end makecodetab
 	
-//	public static void decode(){
-//		System.out.println(bs);
-//		
-//		decodeRecurs(0, huffTree.root);	
-//		System.out.println(decodedMsg);
-//	}
-//	
-//	private static void decodeRecurs(int index, Node current){
-//		if (current.ch != '+'){
-//			decodedMsg += current.ch;	
-//		} 
-//		if (bs.charAt(index) == 1){
-//			decodeRecurs(index + 1, current.leftChild);
-//			decodedMsg += current.ch;
-//		}else if (bs.charAt(index) == 0){
-//			decodeRecurs(index + 1, current.rightChild);
-//			decodedMsg += current.ch;
-//		}else{
-//			System.out.println("this was hit");
-//		}
-//		
-//	}
+	public static void decode(){
+		int index = 0;
+		Node current = huffTree.root;
+		
+		while (index <= secretMessage.length()){
+			if (current.ch == '+'){
+				if (secretMessage.charAt(index) == 1){
+					current = current.leftChild;
+					if (current.ch != '+'){
+						decodedMsg += current.ch;
+						current = huffTree.root;
+						index++;
+					}
+				}else{
+					current = current.rightChild;
+					if (current.ch != '+'){
+						decodedMsg += current.ch;
+						current = huffTree.root;
+						index++;
+					}
+
+				}
+			}
+		}
+
+	}//end decod
 
 }
