@@ -20,8 +20,8 @@ public class Huffman {
 				if ((int) inputString.charAt(i) - 65 != -23){
 					freqTable[(int) inputString.charAt(i) - 65]++;
 				}else{
-					System.out.println("freq tab sub 28 = " + freqTable[28] +
-							"alph.28 = " + ALPHABET.charAt(28));
+//					System.out.println("freq tab sub 28 = " + freqTable[28] +
+//							"alph.28 = " + ALPHABET.charAt(28));
 					freqTable[28]++;
 				}
 			} catch (ArrayIndexOutOfBoundsException e) {
@@ -110,10 +110,10 @@ public class Huffman {
 		for (int i = 0; i < inputString.length(); i++){
 			try{
 			secretMessage += codeTable[inputString.charAt(i) - 65];
-			System.out.println(codeTable[inputString.charAt(i) - 65] + " xx " + inputString.charAt(i));
+//			System.out.println(codeTable[inputString.charAt(i) - 65] + " xx " + inputString.charAt(i));
 			}catch (ArrayIndexOutOfBoundsException e){
 				secretMessage += codeTable[28];
-				System.out.println(codeTable[28] + " xx " + inputString.charAt(i));
+//				System.out.println(codeTable[28] + " xx " + inputString.charAt(i));
 			}
 			//System.out.println(codeTable[inputString.charAt(i) - 65] + " xx " + inputString.charAt(i));
 			
@@ -148,46 +148,31 @@ public class Huffman {
 
 	}//end makecodetab
 	
-	public static void decode(){
-		int index = 0;
-		Node current = huffTree.root;
-		
-		while (current.ch == '+'){
-			if (secretMessage.charAt(index++) == '0'){
-				current = current.leftChild;
-			}else{
-				current = current.rightChild;
-			}
-			decodedMsg += current.ch;
-			current = huffTree.root;
-			
-		}//end while
+	public static void decode() {
+
+		decodeRecursive(huffTree.root, 0);
 		System.out.println("Decoded Message");
 		System.out.println(decodedMsg);
-//		int index = 0;
-//		Node current = huffTree.root;
-//		
-//		while (index <= secretMessage.length()){
-//			if (current.ch == '+'){
-//				if (secretMessage.charAt(index) == 1){
-//					current = current.leftChild;
-//					if (current.ch != '+'){
-//						decodedMsg += current.ch;
-//						current = huffTree.root;
-//						index++;
-//					}
-//				}else{
-//					current = current.rightChild;
-//					if (current.ch != '+'){
-//						decodedMsg += current.ch;
-//						current = huffTree.root;
-//						index++;
-//					}
-//
-//				}
-//			}
-//		}
 
-	}//end decod
+	}// end decod
+
+	private static void decodeRecursive(Node current, int index) {
+		try{
+			while (current.ch == '+') {
+				if (secretMessage.charAt(index) == '1') {
+					current = current.leftChild;
+					index++;
+				} else {
+					current = current.rightChild;
+					index++;
+				}
+
+			}// end while
+			decodedMsg += current.ch;
+			decodeRecursive(huffTree.root, index);
+		} catch (StringIndexOutOfBoundsException e){
+			return;
+		}
+	}
 
 }
