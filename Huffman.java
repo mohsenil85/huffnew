@@ -7,7 +7,7 @@ public class Huffman {
 	static String codedMsg;
 	static String[] codeTable = new String[ALPHABET_SIZE];
 	static String secretMessage = "";
-	static String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ\\[*";
+	static String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\*";
 	static String decodedMsg = "";
 
 	/**
@@ -181,9 +181,9 @@ public class Huffman {
 										// substitutes them for our internal
 										// representation of them
 				codeTable[28] = binString;
-			} else if (localRoot.ch == '[') {
-				codeTable[27] = binString;
 			} else if (localRoot.ch == '\\') {
+				codeTable[27] = binString;
+			} else if (localRoot.ch == '[') {
 				codeTable[26] = binString;
 			} else {
 				codeTable[(((int) localRoot.ch) - 65)] = binString;// the reason we do not use the static ALPHABET string from above is because here we are
