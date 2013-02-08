@@ -7,7 +7,7 @@ public class Huffman {
 	static String codedMsg;
 	static String[] codeTable = new String[ALPHABET_SIZE];
 	static String secretMessage = "";
-	static String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\*";
+	static String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ\\[*";
 	static String decodedMsg = "";
 	static String bs = "";
 
@@ -20,6 +20,8 @@ public class Huffman {
 				if ((int) inputString.charAt(i) - 65 != -23){
 					freqTable[(int) inputString.charAt(i) - 65]++;
 				}else{
+					System.out.println("freq tab sub 28 = " + freqTable[28] +
+							"alph.28 = " + ALPHABET.charAt(28));
 					freqTable[28]++;
 				}
 			} catch (ArrayIndexOutOfBoundsException e) {
@@ -105,17 +107,19 @@ public class Huffman {
 		Node current = huffTree.root;
 		makeCodeTable(current, codedMsg);
 		
-		for (int i = 0; i < inputString.length() - 1; i++){
+		for (int i = 0; i < inputString.length(); i++){
+			try{
 			secretMessage += codeTable[inputString.charAt(i) - 65];
-		//	System.out.println(codeTable[inputString.charAt(i) - 65] + " xx " + inputString.charAt(i));
+			System.out.println(codeTable[inputString.charAt(i) - 65] + " xx " + inputString.charAt(i));
+			}catch (ArrayIndexOutOfBoundsException e){
+				secretMessage += codeTable[28];
+				System.out.println(codeTable[28] + " xx " + inputString.charAt(i));
+			}
+			//System.out.println(codeTable[inputString.charAt(i) - 65] + " xx " + inputString.charAt(i));
 			
 		}
 		
-//		for (int i = 0; i < codeTable.length-1; i++){//for debuggering
-//			if (codeTable[i] != null){
-//				System.out.println("Code " + codeTable[i] + "char " + ALPHABET.charAt(i) );
-//			}
-//		}
+
 		
 		System.out.println("Encoded Message:  ");
 		System.out.println(secretMessage);
@@ -133,8 +137,8 @@ public class Huffman {
 			codeTable[(((int)localRoot.ch) - 65)] = binString;
 			bs+=binString;
 			}
-//			System.out.print(localRoot.ch + " = ");
-//			System.out.println(binString);
+			System.out.print(localRoot.ch + " = ");
+			System.out.println(binString);
 			
 		} else {
 			makeCodeTable(localRoot.leftChild, binString + "1"); 
@@ -148,26 +152,41 @@ public class Huffman {
 		int index = 0;
 		Node current = huffTree.root;
 		
-		while (index <= secretMessage.length()){
-			if (current.ch == '+'){
-				if (secretMessage.charAt(index) == 1){
-					current = current.leftChild;
-					if (current.ch != '+'){
-						decodedMsg += current.ch;
-						current = huffTree.root;
-						index++;
-					}
-				}else{
-					current = current.rightChild;
-					if (current.ch != '+'){
-						decodedMsg += current.ch;
-						current = huffTree.root;
-						index++;
-					}
-
-				}
+		while (current.ch == '+'){
+			if (secretMessage.charAt(index++) == '0'){
+				current = current.leftChild;
+			}else{
+				current = current.rightChild;
 			}
-		}
+			decodedMsg += current.ch;
+			current = huffTree.root;
+			
+		}//end while
+		System.out.println("Decoded Message");
+		System.out.println(decodedMsg);
+//		int index = 0;
+//		Node current = huffTree.root;
+//		
+//		while (index <= secretMessage.length()){
+//			if (current.ch == '+'){
+//				if (secretMessage.charAt(index) == 1){
+//					current = current.leftChild;
+//					if (current.ch != '+'){
+//						decodedMsg += current.ch;
+//						current = huffTree.root;
+//						index++;
+//					}
+//				}else{
+//					current = current.rightChild;
+//					if (current.ch != '+'){
+//						decodedMsg += current.ch;
+//						current = huffTree.root;
+//						index++;
+//					}
+//
+//				}
+//			}
+//		}
 
 	}//end decod
 
