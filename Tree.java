@@ -10,17 +10,6 @@ class Tree
 	// -------------------------------------------------------------
 	public Tree() // constructor
 	{ root = null; } // no nodes in tree yet
-	//-------------------------------------------------------------
-//	public void merge(Tree item1, Tree item2){
-//		Node newNode = new Node();
-//		newNode.freq = item1.root.freq + item2.root.freq;
-//		newNode.ch = '+';
-//		newNode.leftChild = item1.root;
-//		newNode.rightChild = item2.root;
-//		Tree aTree = new Tree();
-//		aTree.insert(newNode);
-//	}
-	// -------------------------------------------------------------
 	public void insert(Node n)
 	{
 		if(root==null) // no node in root
@@ -30,53 +19,7 @@ class Tree
 			System.out.println("Something is wrong"); //insert is only called to create brand new trees, otherwise use merge()
 		} // end else not root
 	} // end insert()
-	public void traverse(int traverseType)
-	{
-		switch(traverseType)
-		{
-		case 1: System.out.print("\nPreorder traversal: ");
-		preOrder(root);
-		break;
-		case 2: System.out.print("\nInorder traversal: ");
-		inOrder(root);
-		break;
-		case 3: System.out.print("\nPostorder traversal: ");
-		postOrder(root);
-		break;
-		}
-		System.out.println();
-	}
-	// -------------------------------------------------------------
-	private void preOrder(Node localRoot)
-	{
-		if(localRoot != null)
-		{
-			System.out.print(localRoot.freq + " ");
-			preOrder(localRoot.leftChild);
-			preOrder(localRoot.rightChild);
-		}
-	}
-	// -------------------------------------------------------------
-	private void inOrder(Node localRoot)
-	{
-		if(localRoot != null)
-		{
-			inOrder(localRoot.leftChild);
-			System.out.print(localRoot.freq + " ");
-			inOrder(localRoot.rightChild);
-		}
-	}
-	// -------------------------------------------------------------
-	private void postOrder(Node localRoot)
-	{
-		if(localRoot != null)
-		{
-			postOrder(localRoot.leftChild);
-			postOrder(localRoot.rightChild);
-			System.out.print(localRoot.freq + " ");
-		}
-	}
-	// -------------------------------------------------------------
+
 	public void displayTree()
 	{
 		Stack globalStack = new Stack();

@@ -9,19 +9,15 @@ public class Huffman {
 	static String secretMessage = "";
 	static String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ\\[*";
 	static String decodedMsg = "";
-	static String bs = "";
 
 	public static void makeFreqTable(String is) {
 		inputString = is;
 
 		for (int i = 0; i < is.length(); i++) {
 			try {
-			//	System.out.println("(int) inputString.charAt(i) - 65 = " + ((int) inputString.charAt(i) - 65) );
-				if ((int) inputString.charAt(i) - 65 != -23){
+				if ((int) inputString.charAt(i) - 65 != -23){// this checks for the end of file char '*'
 					freqTable[(int) inputString.charAt(i) - 65]++;
 				}else{
-//					System.out.println("freq tab sub 28 = " + freqTable[28] +
-//							"alph.28 = " + ALPHABET.charAt(28));
 					freqTable[28]++;
 				}
 			} catch (ArrayIndexOutOfBoundsException e) {
@@ -36,19 +32,16 @@ public class Huffman {
 				System.out.print(freqTable[i] + " ");
 			}
 		}
-		//System.out.print('1');
 		System.out.println();
 		for (int i = 0; i < freqTable.length; i++) {
 			if (freqTable[i] != 0)
 				System.out.print(ALPHABET.charAt(i) + " ");
 		}
-		//System.out.print('*');//the eof node actually gets appended elsewhere, so this is just here to make the table look how its going to be
 		System.out.println();
 	}
 
 	public static void enqueue() {
 		
-//		try {
 			for (int i = 0; i < freqTable.length; i++) {
 				
 
@@ -58,22 +51,9 @@ public class Huffman {
 					aNode.freq = freqTable[i];
 					Tree aTree = new Tree();
 					aTree.insert(aNode);
-					// aTree.displayTree();
 					theQ.insert(aTree);
-					// aNode.displayNode();
 				} // end if nodefreq not zero
-			
-
 			} // end for
-//			Node eofNode = new Node();//this is where the eof node gets appended.  This is so the algorithm knows to ignore any data that comes after this char
-//			eofNode.ch = '*';
-//			eofNode.freq = 1;
-//			Tree eofTree = new Tree();
-//			eofTree.insert(eofNode);
-//			theQ.insert(eofTree);
-//		} catch (ArrayIndexOutOfBoundsException e) {
-//			System.out.println("this only happens sometimes");
-//		}// end try catch()
 	}// end enqueue()
 
 	public static void createTree() {
@@ -85,10 +65,9 @@ public class Huffman {
 			} 
 			huffTree = theQ.remove();
 			huffTree.displayTree();
-		} catch (ArrayIndexOutOfBoundsException e) {
+		} catch (ArrayIndexOutOfBoundsException e) {// prevents from trying to display an empty tree
 			System.out.println("Nothing to display");
 		}
-
 	}
 
 	private static Tree merge(Tree item1, Tree item2) {
@@ -109,25 +88,18 @@ public class Huffman {
 		
 		for (int i = 0; i < inputString.length(); i++){
 			try{
-			secretMessage += codeTable[inputString.charAt(i) - 65];
-//			System.out.println(codeTable[inputString.charAt(i) - 65] + " xx " + inputString.charAt(i));
+			secretMessage += codeTable[inputString.charAt(i) - 65];//appends the representation  for a given char onto the secret message
 			}catch (ArrayIndexOutOfBoundsException e){
 				secretMessage += codeTable[28];
-//				System.out.println(codeTable[28] + " xx " + inputString.charAt(i));
 			}
-			//System.out.println(codeTable[inputString.charAt(i) - 65] + " xx " + inputString.charAt(i));
-			
 		}
-		
-
-		
 		System.out.println("Encoded Message:  ");
 		System.out.println(secretMessage);
 	}
 	
 	private static void makeCodeTable(Node localRoot, String binString){
 		if (!(localRoot.ch == '+')){
-			if (localRoot.ch == '*'){
+			if (localRoot.ch == '*'){//checks for non-letter chars and substitutes them for our internal representation of them
 				codeTable[28] = binString;
 			} else if (localRoot.ch == '['){
 				codeTable[27] = binString;
@@ -135,10 +107,8 @@ public class Huffman {
 				codeTable[26] = binString;
 			} else {
 			codeTable[(((int)localRoot.ch) - 65)] = binString;
-			bs+=binString;
+			
 			}
-			System.out.print(localRoot.ch + " = ");
-			System.out.println(binString);
 			
 		} else {
 			makeCodeTable(localRoot.leftChild, binString + "1"); 
@@ -158,7 +128,7 @@ public class Huffman {
 
 	private static void decodeRecursive(Node current, int index) {
 		try{
-			while (current.ch == '+') {
+			while (current.ch == '+') {//while on a non-leaf node, seek the leaves and when it finds them, appends them to the decoded message
 				if (secretMessage.charAt(index) == '1') {
 					current = current.leftChild;
 					index++;

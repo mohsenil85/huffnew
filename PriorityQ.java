@@ -1,4 +1,3 @@
-import java.io.IOException;
 // priorityQ.java
 // demonstrates priority queue
 // to run this program: C>java PriorityQApp
@@ -41,10 +40,4 @@ class PriorityQ
 	//-------------------------------------------------------------
 	public Tree remove() // remove minimum item
 	{ return queArray[--nItems]; }
-	//-------------------------------------------------------------
-	//-------------------------------------------------------------
-	public boolean isEmpty() // true if queue is empty
-	{ return (nItems==0); }
-	//-------------------------------------------------------------
-	//-------------------------------------------------------------
 } // end class PriorityQ
